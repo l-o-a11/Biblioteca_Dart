@@ -20,8 +20,24 @@ void main() {
         agregarLibro(biblioteca);
         break;
 
+      case 2:
+        listarLibros(biblioteca);
+        break;
+
+      case 3:
+        actualizarLibro(biblioteca);
+        break;
+
+      case 4:
+        eliminarLibro(biblioteca);
+        break;
+
+      case 0:
+        print("Saliendo del programa...");
+        break;
+
       default:
-        print(" Opción no válida.");
+        print("Opción no válida.");
     }
   } while (opcion != 0);
 }
@@ -43,7 +59,7 @@ void agregarLibro(List<Map<String, dynamic>> biblioteca) {
   if (titulo == null || titulo.isEmpty ||
       autor == null || autor.isEmpty ||
       anio == null) {
-    print('\n Error: Datos inválidos.');
+    print('\nError: Datos inválidos.');
     return;
   }
 
@@ -53,6 +69,82 @@ void agregarLibro(List<Map<String, dynamic>> biblioteca) {
     'anio': anio,
   });
 
-  print('\n Libro agregado correctamente.');
+  print('\nLibro agregado correctamente.');
 }
 
+void listarLibros(List<Map<String, dynamic>> biblioteca) {
+  if (biblioteca.isEmpty) {
+    print('\nNo hay libros registrados.');
+    return;
+  }
+
+  print('\n--- Lista de libros ---');
+  for (int i = 0; i < biblioteca.length; i++) {
+    print('Índice: $i');
+    print('Título: ${biblioteca[i]['titulo']}');
+    print('Autor: ${biblioteca[i]['autor']}');
+    print('Año: ${biblioteca[i]['anio']}');
+    print('-----------------------');
+  }
+}
+
+void actualizarLibro(List<Map<String, dynamic>> biblioteca) {
+  if (biblioteca.isEmpty) {
+    print("\nNo hay libros para actualizar.");
+    return;
+  }
+
+  listarLibros(biblioteca);
+
+  stdout.write("\nIngrese el índice del libro a actualizar: ");
+  int? indice = int.tryParse(stdin.readLineSync() ?? '');
+
+  if (indice == null || indice < 0 || indice >= biblioteca.length) {
+    print("Índice inválido.");
+    return;
+  }
+
+  stdout.write("Nuevo título: ");
+  String? nuevoTitulo = stdin.readLineSync();
+
+  stdout.write("Nuevo autor: ");
+  String? nuevoAutor = stdin.readLineSync();
+
+  stdout.write("Nuevo año: ");
+  int? nuevoAnio = int.tryParse(stdin.readLineSync() ?? '');
+
+  if (nuevoTitulo == null || nuevoTitulo.isEmpty ||
+      nuevoAutor == null || nuevoAutor.isEmpty ||
+      nuevoAnio == null) {
+    print("Error: Datos inválidos.");
+    return;
+  }
+
+  biblioteca[indice] = {
+    'titulo': nuevoTitulo,
+    'autor': nuevoAutor,
+    'anio': nuevoAnio,
+  };
+
+  print("Libro actualizado correctamente.");
+}
+
+void eliminarLibro(List<Map<String, dynamic>> biblioteca) {
+  if (biblioteca.isEmpty) {
+    print('\nNo hay libros para eliminar.');
+    return;
+  }
+
+  listarLibros(biblioteca);
+
+  stdout.write('\nIngrese el índice del libro a eliminar: ');
+  int? indice = int.tryParse(stdin.readLineSync() ?? '');
+
+  if (indice == null || indice < 0 || indice >= biblioteca.length) {
+    print('Índice inválido.');
+    return;
+  }
+
+  biblioteca.removeAt(indice);
+  print('Libro eliminado correctamente.');
+}
