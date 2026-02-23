@@ -1,13 +1,8 @@
 import 'dart:io';
 
-// Importaciones
-import 'punto1.dart';
-import 'punto2.dart';
-import 'punto3.dart';
-import 'punto4.dart';
-
 void main() {
   int opcion;
+  List<Map<String, dynamic>> biblioteca = [];
 
   do {
     print("\n========== MENÚ LIBRERIA ==========");
@@ -18,16 +13,46 @@ void main() {
     print("0. Salir");
     stdout.write("Seleccione una opción: ");
 
-    opcion = int.parse(stdin.readLineSync()!);
+    opcion = int.tryParse(stdin.readLineSync() ?? '') ?? -1;
 
     switch (opcion) {
-
-      case 0:
-        print("Saliendo del programa...");
+      case 1:
+        agregarLibro(biblioteca);
         break;
 
       default:
-        print("Opción no válida.");
+        print(" Opción no válida.");
     }
   } while (opcion != 0);
 }
+
+// ================= FUNCIONES =================
+
+void agregarLibro(List<Map<String, dynamic>> biblioteca) {
+  stdout.write('Ingrese el título del libro: ');
+  String? titulo = stdin.readLineSync();
+
+  stdout.write('Ingrese el autor del libro: ');
+  String? autor = stdin.readLineSync();
+
+  stdout.write('Ingrese el año de publicación: ');
+  String? inputAnio = stdin.readLineSync();
+
+  int? anio = int.tryParse(inputAnio ?? '');
+
+  if (titulo == null || titulo.isEmpty ||
+      autor == null || autor.isEmpty ||
+      anio == null) {
+    print('\n Error: Datos inválidos.');
+    return;
+  }
+
+  biblioteca.add({
+    'titulo': titulo,
+    'autor': autor,
+    'anio': anio,
+  });
+
+  print('\n Libro agregado correctamente.');
+}
+
